@@ -1,4 +1,4 @@
-
+private int t;
 private int x;
 private int y;
 private int vx; //velocity on x axis
@@ -9,5 +9,8 @@ public Ball(){
 }
 
 public int getNextX(){
-
+	return (int)(vx *t);
+}
+public int getNextY() {
+	return (int)(vy*t-0.5*9.8*Math.pow(t, 2));
 }
