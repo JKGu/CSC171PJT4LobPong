@@ -1,1 +1,13 @@
 
+private int x;
+private int y;
+private int vx; //velocity on x axis
+private int vy; //ditto
+
+public Ball(){
+
+}
+
+public int getNextX(){
+
+}
