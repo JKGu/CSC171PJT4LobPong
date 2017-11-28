@@ -1,0 +1,13 @@
+
+public class Paddle {
+int paddlex;
+public Paddle() {
+	paddlex=350;
+}
+public void setPaddleX(int x) {
+	this.paddlex+=x;
+}
+public int getPaddleX() {
+	return paddlex;
+}
+}
