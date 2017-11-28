@@ -6,6 +6,7 @@ public class Game {
 		Level canvas=new Level();
 		frame.add(canvas);
 		frame.setSize(800, 800);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
