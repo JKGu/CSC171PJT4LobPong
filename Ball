@@ -1,16 +1,53 @@
-private int t;
-private int x;
-private int y;
-private int vx; //velocity on x axis
-private int vy; //ditto
+	//y轴向上为正方向, 坐标计算全部以习惯坐标系为准，draw的时候再换算过来
+	//diameter of Ball=20
+public class Ball {
+	private double t;
+	private double step;//time length of each step
+	private int ballx;
+	private int bally;
+	private int vx; //velocity on x axis
+	private int vy; //ditto
+	double g=9.8;
+	private int paddlex;
+	public Ball(){
+	ballx=50;
+	bally=750;
+	vx=250;
+	vy=250;
+	t=0;
+	step=0.01;
+	}
 
-public Ball(){
+	public int getNextX(){
+		return (int)(vx *t);
+	}
+	public int getNextY() {
+		return (int)(vy*t-0.5*9.8*Math.pow(t, 2));
+	}
+	public int getX() {
+		return ballx;
+	}
+	public int gety() {
+		return bally;
+	}
+	public void setPaddleXInBall(int x) {
+		this.paddlex=x;
+	}
+	public void nextMove(){
+		t+=step;
+		if((ballx>=800-20)||(ballx<=0))//hit right or left border
+			vx=-vx;
+		else if(bally>=800)//hit top border
+			vy=-vy;
+		else if ((bally>=200+10)&&(bally<=200+20)&&(ballx>=paddlex)&&(ballx<=paddlex+100))
+			vy=-vy;
+		else if(bally<=20)
+			System.out.println("You loose!");
+		else
+			vy=(int) (vy-g*t);
+		
+		ballx=ballx+(int)(vx*step);
+		bally=bally+(int)(vy*step-0.5*g*Math.pow(step, 2));	
+		System.out.println(" "+vx+" "+vy+" "+ballx+" "+bally);
 
-}
-
-public int getNextX(){
-	return (int)(vx *t);
-}
-public int getNextY() {
-	return (int)(vy*t-0.5*9.8*Math.pow(t, 2));
-}
+}}
