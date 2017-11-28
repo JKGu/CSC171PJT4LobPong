@@ -1,0 +1,65 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.Timer;
+
+public class Level extends JComponent implements KeyListener{
+	protected Timer timer;
+	protected Paddle paddle=new Paddle();
+	protected GameTimer gameTimer;
+	int ballx=400;
+	int bally=400;
+	
+
+
+	public Level() {
+		setLayout(new BorderLayout());
+		this.addKeyListener(this);
+		setFocusable(true);
+		gameTimer=new GameTimer(10000);
+		timer=new Timer(1,new TimerCallback());
+		timer.start();
+	}
+	
+	protected class TimerCallback implements ActionListener{
+			@Override
+		public void actionPerformed(ActionEvent arg0) {
+				gameTimer.incrementTime();
+				if (!gameTimer.incrementTime()) 
+					System.out.println("Game over!");
+				repaint();
+		}}
+
+	public void paintComponent(Graphics g) {
+		g.fillOval(ballx, bally, 20, 20);
+		g.fillRect(paddle.getPaddleX(), 600, 100, 10);
+		gameTimer.drawTimer(g);
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		System.out.println(arg0.getKeyCode());
+		switch(arg0.getKeyCode()) {
+		case 39://right arrow
+			paddle.setPaddleX(20);
+			break;
+		case 37://left arrow
+			paddle.setPaddleX(-20);
+			break;
+		default:
+			//Ignore
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {}
+	@Override
+	public void keyTyped(KeyEvent arg0) {}
+}
