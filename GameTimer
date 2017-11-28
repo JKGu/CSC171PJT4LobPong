@@ -1,0 +1,23 @@
+import java.awt.Graphics;
+
+public class GameTimer {
+protected int length;
+protected int timeElapsed;
+
+public GameTimer(int x) {
+	this.length=x;
+	timeElapsed=0;
+}
+
+public boolean incrementTime() {
+	if(this.timeElapsed+1>length)
+		return false;//game over
+	else
+		timeElapsed+=1;
+		return true;
+}
+
+public void drawTimer(Graphics x) {
+	x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50); //to do: make a graphical timer
+}
+}
