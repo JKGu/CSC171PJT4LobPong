@@ -1,1 +1,12 @@
-//this is the main class
+import javax.swing.JFrame;
+
+public class Game {
+	public static void main (String[] args) {
+		JFrame frame=new JFrame("Lob Pong");
+		Level canvas=new Level();
+		frame.add(canvas);
+		frame.setSize(800, 800);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}
