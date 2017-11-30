@@ -18,6 +18,7 @@ public boolean incrementTime() {
 }
 
 public void drawTimer(Graphics x) {
-	x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50); //to do: make a graphical timer
+	x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50);
+	x.fillArc(700, 100, 50, 50 , 0, (int)(360*(timeElapsed/length)));
 }
 }
