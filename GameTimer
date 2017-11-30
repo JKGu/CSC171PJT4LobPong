@@ -9,20 +9,19 @@ public GameTimer(int x) {
 	timeElapsed=0;
 }
 
-public boolean incrementTime() {
-	if(this.timeElapsed+1>length)
-		return false;//game over
-	else
+public void incrementTime() {
 		timeElapsed+=1;
-		return true;
+}
+public int getTime() {
+	return timeElapsed;
 }
 
 public void drawTimer(Graphics x) {
-	do {
-	incrementTime();
-	x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50);
-	x.fillArc(700, 100, 50, 50 , 0, (int)(360*(timeElapsed/length)));
-	}while(incrementTime()==false);
+//	do {
+//	incrementTime();
+    x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50);
+//	x.fillArc(700, 100, 50, 50 , 0, (int)(360*(timeElapsed/length)));
+//	}while(incrementTime()==false);
 	
 }
 }
