@@ -12,58 +12,42 @@ import javax.swing.Timer;
 
 public class Level extends JComponent implements KeyListener{
 	protected Timer timer;
-	protected Paddle paddle=new Paddle();
+	protected Paddle paddle;
 	protected GameTimer gameTimer;
 	protected Ball ball;
+	protected int lives;
+	protected boolean isAlive=true;
 
-
-	public Level() {
-		setLayout(new BorderLayout());
+	public Level(int diff) {
+		int length=(int) (300*Math.pow(0.5, diff-1));
+		if(length<20)
+			length=20;
+		paddle=new Paddle(length);
+		ball=new Ball(length);
+		ball.setpaddleLengthInBall(paddle.getLength());
 		this.addKeyListener(this);
 		setFocusable(true);
-		gameTimer=new GameTimer(3000);
-		ball=new Ball();
-		timer=new Timer(1,new TimerCallback());
-		timer.start();
-	}
-
-	
-	protected class TimerCallback implements ActionListener{
-			@Override
-		public void actionPerformed(ActionEvent arg0) {
-				gameTimer.incrementTime();
-				if (!gameTimer.incrementTime()) 
-					System.out.println("Game over!");
-				
-				ball.nextMove();
-				
-				repaint();
-		}}
-
-	public void paintComponent(Graphics g) {
-		g.fillOval(ball.getX(),800-ball.gety(), 20, 20);
-		g.fillRect(paddle.getPaddleX(), 600, 100, 10);
-		gameTimer.drawTimer(g);
+		gameTimer=new GameTimer(1500);
+		lives=3;
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		System.out.println(arg0.getKeyCode());
 		switch(arg0.getKeyCode()) {
 		case 39://right arrow
 			if(paddle.getPaddleX()<800-100)
-			paddle.setPaddleX(20);
+			paddle.setPaddleX(30);
 			break;
 		case 37://left arrow
 			if(paddle.getPaddleX()>0)
-			paddle.setPaddleX(-20);
+			paddle.setPaddleX(-30);
 			break;
 		default:
 			//Ignore
 		}
 		ball.setPaddleXInBall(paddle.getPaddleX());
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent arg0) {}
 	@Override
