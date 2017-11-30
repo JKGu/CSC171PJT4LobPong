@@ -1,6 +1,7 @@
-	//y轴向上为正方向, 坐标计算全部以习惯坐标系为准，draw的时候再换算过来
+//y轴向上为正方向, 坐标计算全部以习惯坐标系为准，draw的时候再换算过来
 	//diameter of Ball=20
 public class Ball {
+	boolean loose=false;
 	private double t;
 	private double step;//time length of each step
 	private int ballx;
@@ -9,13 +10,15 @@ public class Ball {
 	private int vy; //ditto
 	double g=9.8;
 	private int paddlex;
-	public Ball(){
+	protected int paddleLengthx;
+	public Ball(int x){
 	ballx=50;
 	bally=750;
-	vx=250;
-	vy=250;
+	vx=200;
+	vy=50;
 	t=0;
-	step=0.01;
+	step=0.005;
+	paddleLengthx=x;
 	}
 
 	public int getNextX(){
@@ -33,21 +36,38 @@ public class Ball {
 	public void setPaddleXInBall(int x) {
 		this.paddlex=x;
 	}
+	public void setpaddleLengthInBall(int y) {
+		this.paddleLengthx=y;
+	}
 	public void nextMove(){
+		System.out.println(ballx+" "+bally+" "+paddlex);
 		t+=step;
 		if((ballx>=800-20)||(ballx<=0))//hit right or left border
 			vx=-vx;
 		else if(bally>=800)//hit top border
 			vy=-vy;
-		else if ((bally>=200+10)&&(bally<=200+20)&&(ballx>=paddlex)&&(ballx<=paddlex+100))
-			vy=-vy;
+		else if ((bally>=200+10)&&(bally<=200+30)&&(ballx>=paddlex)&&(ballx<=paddlex+paddleLengthx))
+			vy=-vy+100;
 		else if(bally<=20)
-			System.out.println("You loose!");
+			{loose=true;
+			System.out.println("=======================================");
+			}
 		else
 			vy=(int) (vy-g*t);
 		
 		ballx=ballx+(int)(vx*step);
 		bally=bally+(int)(vy*step-0.5*g*Math.pow(step, 2));	
-		System.out.println(" "+vx+" "+vy+" "+ballx+" "+bally);
-
-}}
+}
+	public boolean loose() {
+		return loose;
+	}
+	
+	public void reset() {
+		this.ballx=50;
+		this.bally=750;
+		this.vx=200;
+		this.vy=50;
+		this.t=0;
+		this.loose=false;
+	}
+}
