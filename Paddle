@@ -1,13 +1,24 @@
 
 public class Paddle {
-int paddlex;
-public Paddle() {
+protected int paddlex;
+protected int length;
+public Paddle(int length) {
 	paddlex=350;
+	this.length=length;
 }
 public void setPaddleX(int x) {
 	this.paddlex+=x;
 }
+public void setAbsX(int x) {
+	this.paddlex=x;
+}
 public int getPaddleX() {
 	return paddlex;
+}
+public int getLength() {
+	return length;
+}
+public void setLength(int length) {
+	this.length=length;
 }
 }
