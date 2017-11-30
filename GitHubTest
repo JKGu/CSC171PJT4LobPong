@@ -3,3 +3,52 @@
 //Junkang Gu jgu8
 //Jiajiang Yang jyang80
 //Xueqian Li xli114
+
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.Color;
+
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+
+public class explosion4 extends JPanel{
+	
+	public void paintComponent(Graphics g) {
+		double angle=72*Math.PI/180;
+		int x1=200;
+		int x2=(int)(x1-Math.sin(angle)*100);
+		int x3=(int)(x1+Math.sin(angle)*100);
+		int x4=(int)(x1-Math.sin(angle/2)*100);
+		int x5=(int)(x1+Math.sin(angle/2)*100);
+		int y1=100;
+		int y2=(int)(200-Math.cos(angle)*100);
+		int y3=y2;
+		int y4=(int)(200+Math.cos(angle/2)*100);
+		int y5=y4;
+		int bx=(int)(200+Math.cos(angle)*Math.tan(angle/2)*100);
+		int by=y2;
+		Polygon a=new Polygon();
+		Polygon b=new Polygon();
+		a.addPoint(x2, y2);
+		a.addPoint(x5, y5);
+		a.addPoint(bx, by);
+		b.addPoint(x1, y1);
+		b.addPoint(bx, by);
+		b.addPoint(x3, y3);
+		b.addPoint(x4, y4);
+		g.setColor(Color.RED);
+		g.fillPolygon(a);
+		g.fillPolygon(b);
+		
+		}
+			
+		
+	public static void main(String[] args) {
+		JFrame frame=new JFrame();
+		explosion4 canvas=new explosion4();
+		frame.add(canvas);
+		frame.setSize(500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}
