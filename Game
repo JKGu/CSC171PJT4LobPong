@@ -15,11 +15,19 @@ public class Game extends JComponent implements KeyListener{
 	protected Timer timer;
 	protected Level level;
 	protected int diffc=1;
+	protected int score;
+	protected int scoreTemp;
+	protected int maxScoreInLevel;
+	protected int keySpeed=5;
 	public Game() {
+		score=0;
+		scoreTemp=0;
+		maxScoreInLevel=0;
 		this.addKeyListener(this);
 		setFocusable(true);
 		level=new Level(diffc);
 		timer=new Timer(10,new TimerCallback());
+		JOptionPane.showMessageDialog(null, "Welcome!\n Level 1");
 		timer.start();
 	}
 	
@@ -28,20 +36,33 @@ public class Game extends JComponent implements KeyListener{
 	public void actionPerformed(ActionEvent arg0) {
 			level.gameTimer.incrementTime();
 			if (level.gameTimer.timeElapsed>=level.gameTimer.length) {
-				JOptionPane.showMessageDialog(null, "You win!");
+				scoreTemp=score;
 				diffc++;
+				JOptionPane.showMessageDialog(null, "You win!\n Your score: "+score+"\nNext level: Level"+diffc);
 				level=new Level(diffc);
 				level.gameTimer=new GameTimer(1500);
 			}
 			level.ball.nextMove();
+			if (level.ball.score) {
+				score+=10*diffc;
+				level.ball.score=false;
+			}
 			if (level.ball.loose()) {
 				level.lives-=1;
 				if(level.lives>0) {
 				level.ball.reset();
 				level.gameTimer=new GameTimer(1500);
+				 if(score>maxScoreInLevel) {
+					 maxScoreInLevel=score;
+				 }
+				score=scoreTemp;
 				}
 				else
-				{JOptionPane.showMessageDialog(null, "You loose!");
+				{if(maxScoreInLevel<score) {maxScoreInLevel=score;}
+				JOptionPane.showMessageDialog(null, "You loose! \n Your score:"+maxScoreInLevel+"\n Back to Level 1");
+				score=0;
+				scoreTemp=0;
+				maxScoreInLevel=0;
 				diffc=1;
 				level=new Level(diffc);}
 			}
@@ -52,21 +73,24 @@ public void paintComponent(Graphics g) {
 	g.fillOval(level.ball.getX(),800-level.ball.gety(), 20, 20);
 	g.fillRect(level.paddle.getPaddleX(), 600, level.paddle.getLength(), 10);
 	level.gameTimer.drawTimer(g);
-	g.drawString(Integer.toString(level.lives), 50, 50);
+	g.drawString("Lives:"+Integer.toString(level.lives), 50, 50);
+	g.drawString("Score: "+Integer.toString(score), 50, 100);
 }
 
 @Override
 public void keyPressed(KeyEvent arg0) {
+	keySpeed+=5;
+	System.out.println(arg0.getKeyCode());
 	switch(arg0.getKeyCode()) {
-	case 39://right arrow
+	case 68://D
 		if(level.paddle.getPaddleX()<800-level.paddle.length)
-		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		{level.paddle.setPaddleX(keySpeed);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else 
 		{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		break;
-	case 37://left arrow
+	case 65://A
 		if(level.paddle.getPaddleX()>0)
-		{level.paddle.setPaddleX(-30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		{level.paddle.setPaddleX(-keySpeed);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else
 			{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		break;
@@ -88,6 +112,7 @@ public static void main (String[] args) {
 
 @Override
 public void keyReleased(KeyEvent e) {
+	keySpeed=5;
 }
 
 @Override
