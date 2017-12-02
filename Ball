@@ -9,13 +9,15 @@ public class Ball {
 	private int vx; //velocity on x axis
 	private int vy; //ditto
 	double g=9.8;
-	private int paddlex;
+	private int paddlex=350;
 	protected int paddleLengthx;
+	protected boolean score;
+	
 	public Ball(int x){
 	ballx=50;
 	bally=750;
-	vx=200;
-	vy=50;
+	vx=1500;
+	vy=200;
 	t=0;
 	step=0.005;
 	paddleLengthx=x;
@@ -47,9 +49,10 @@ public class Ball {
 		else if(bally>=800)//hit top border
 			vy=-vy;
 		else if ((bally>=200+10)&&(bally<=200+30)&&(ballx>=paddlex)&&(ballx<=paddlex+paddleLengthx))
-			vy=-vy+100;
+			{vy=-vy+150;			score=true;}
 		else if(bally<=20)
 			{loose=true;
+			
 			System.out.println("=======================================");
 			}
 		else
@@ -65,8 +68,8 @@ public class Ball {
 	public void reset() {
 		this.ballx=50;
 		this.bally=750;
-		this.vx=200;
-		this.vy=50;
+		this.vx=1500;
+		this.vy=200;
 		this.t=0;
 		this.loose=false;
 	}
