@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 public class GameTimer {
@@ -19,7 +21,11 @@ public int getTime() {
 public void drawTimer(Graphics x) {
 //	do {
 //	incrementTime();
-    x.drawString(Integer.toString(timeElapsed*100/length)+"%", 700, 50);
+	x.setColor(new Color(0,153,37));
+	x.setFont(new Font(x.getFont().getFontName(), Font.PLAIN, 20) );
+    x.drawString("Time Remaining:", 620, 30);
+	x.drawRect(650, 50, 100, 20);
+    x.fillRect(650, 50, 100-timeElapsed*100/length,20);
 //	x.fillArc(700, 100, 50, 50 , 0, (int)(360*(timeElapsed/length)));
 //	}while(incrementTime()==false);
 	
