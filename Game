@@ -3,6 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -18,7 +20,8 @@ public class Game extends JComponent implements KeyListener{
 	protected int score;
 	protected int scoreTemp;
 	protected int maxScoreInLevel;
-	protected int keySpeed=5;
+	protected int keySpeed=15;
+	protected List<NonStationaryObject> nsoList=new ArrayList<NonStationaryObject>();
 	public Game() {
 		score=0;
 		scoreTemp=0;
@@ -35,14 +38,18 @@ public class Game extends JComponent implements KeyListener{
 		@Override
 	public void actionPerformed(ActionEvent arg0) {
 			level.gameTimer.incrementTime();
+			checkNSO(nsoList,level.ball.ballx+10,level.ball.bally+10);
+			updateNSO(nsoList);
 			if (level.gameTimer.timeElapsed>=level.gameTimer.length) {
 				scoreTemp=score;
 				diffc++;
 				JOptionPane.showMessageDialog(null, "You win!\n Your score: "+score+"\nNext level: Level"+diffc);
 				level=new Level(diffc);
+				nsoList.clear();
 				level.gameTimer=new GameTimer(1500);
 			}
 			level.ball.nextMove();
+			generateNSO(nsoList,100);
 			if (level.ball.score) {
 				score+=10*diffc;
 				level.ball.score=false;
@@ -59,7 +66,7 @@ public class Game extends JComponent implements KeyListener{
 				}
 				else
 				{if(maxScoreInLevel<score) {maxScoreInLevel=score;}
-				JOptionPane.showMessageDialog(null, "You loose! \n Your score:"+maxScoreInLevel+"\n Back to Level 1");
+				JOptionPane.showMessageDialog(null, "You loose! \n Your score: "+maxScoreInLevel+"\n Back to Level 1");
 				score=0;
 				scoreTemp=0;
 				maxScoreInLevel=0;
@@ -75,12 +82,12 @@ public void paintComponent(Graphics g) {
 	level.gameTimer.drawTimer(g);
 	g.drawString("Lives:"+Integer.toString(level.lives), 50, 50);
 	g.drawString("Score: "+Integer.toString(score), 50, 100);
+	drawNSOs(nsoList,g);
 }
 
 @Override
 public void keyPressed(KeyEvent arg0) {
-	keySpeed+=5;
-	System.out.println(arg0.getKeyCode());
+	keySpeed+=2;
 	switch(arg0.getKeyCode()) {
 	case 68://D
 		if(level.paddle.getPaddleX()<800-level.paddle.length)
@@ -112,12 +119,46 @@ public static void main (String[] args) {
 
 @Override
 public void keyReleased(KeyEvent e) {
-	keySpeed=5;
+	keySpeed=15;
 }
 
 @Override
 public void keyTyped(KeyEvent e) {
 }
+
+public void generateNSO(List<NonStationaryObject> x, int num) {
+	int decision=(int)(Math.random()*num);
+	switch(decision) {
+	case 0:
+		x.add(new MovingCloud((int)(Math.random()*600+100),(int)(Math.random()*500+400)));	
+	break;
+	default:
+	
+	}
+}
+public void drawNSOs(List<NonStationaryObject>x, Graphics y) {
+	if(!x.isEmpty()) {
+	for(NonStationaryObject z:x) {
+		z.drawNSO(y);
+	}}
+}
+public void checkNSO(List<NonStationaryObject> x, int a, int b) {
+	System.out.println(x);
+	if(!x.isEmpty()) {
+	for(NonStationaryObject z:x) {
+		System.out.println("Check"+((a<z.nsoX+50)&&(a>z.nsoX-50))+" "+((b<z.nsoY+50)&&(b>z.nsoY-50)));
+		if(z.hit(a, b)) {
+			score+=z.bonous;
+		}
+	}}
+}
+public void updateNSO(List<NonStationaryObject>x) {
+	if(!x.isEmpty()) {
+	for(NonStationaryObject z:x) {
+		z.move();
+	}}
+}
+
 }
 
 
