@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public class Level extends JComponent implements KeyListener{
+public class Level extends JComponent {
 	protected Timer timer;
 	protected Paddle paddle;
 	protected GameTimer gameTimer;
@@ -25,31 +25,9 @@ public class Level extends JComponent implements KeyListener{
 		paddle=new Paddle(length);
 		ball=new Ball(length);
 		ball.setpaddleLengthInBall(paddle.getLength());
-		this.addKeyListener(this);
 		setFocusable(true);
 		gameTimer=new GameTimer(1500);
 		lives=3;
 	}
 	
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		switch(arg0.getKeyCode()) {
-		case 39://right arrow
-			if(paddle.getPaddleX()<800-100)
-			paddle.setPaddleX(30);
-			break;
-		case 37://left arrow
-			if(paddle.getPaddleX()>0)
-			paddle.setPaddleX(-30);
-			break;
-		default:
-			//Ignore
-		}
-		ball.setPaddleXInBall(paddle.getPaddleX());
-	}
-	
-	@Override
-	public void keyReleased(KeyEvent arg0) {}
-	@Override
-	public void keyTyped(KeyEvent arg0) {}
 }
