@@ -201,6 +201,7 @@ public void drawObstacle(Graphics x) {
 
 public void AI(int x,int p, int l) {
 	if(level.ball.bally<400) {
+		
 	if(x>p+0.5*l+5) {
 		if(p<800-l)
 		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
