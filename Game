@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +24,7 @@ public class Game extends JComponent implements KeyListener{
 	protected int maxScoreInLevel;
 	protected int keySpeed=15;
 	protected List<NonStationaryObject> nsoList=new ArrayList<NonStationaryObject>();
+	protected List<Obstacle> obList=new ArrayList<Obstacle>();
 	public Game() {
 		score=0;
 		scoreTemp=0;
@@ -30,6 +33,8 @@ public class Game extends JComponent implements KeyListener{
 		setFocusable(true);
 		level=new Level(diffc);
 		timer=new Timer(10,new TimerCallback());
+		generateObstacle();
+		level.ball.loadObstacle(obList);
 		JOptionPane.showMessageDialog(null, "Welcome!\n Level 1");
 		timer.start();
 	}
@@ -46,8 +51,12 @@ public class Game extends JComponent implements KeyListener{
 				JOptionPane.showMessageDialog(null, "You win!\n Your score: "+score+"\nNext level: Level"+diffc);
 				level=new Level(diffc);
 				nsoList.clear();
+				obList.clear();
+				generateObstacle();
+				level.ball.loadObstacle(obList);
 				level.gameTimer=new GameTimer(1500);
 			}
+			AI(level.ball.ballx,level.paddle.paddlex,level.paddle.length);
 			level.ball.nextMove();
 			generateNSO(nsoList,100);
 			if (level.ball.score) {
@@ -71,18 +80,28 @@ public class Game extends JComponent implements KeyListener{
 				scoreTemp=0;
 				maxScoreInLevel=0;
 				diffc=1;
-				level=new Level(diffc);}
+				level=new Level(diffc);
+				nsoList.clear();
+				generateObstacle();
+				}
 			}
 			repaint();
 	}}
 
 public void paintComponent(Graphics g) {
+	drawObstacle(g);
+	drawNSOs(nsoList,g);
+	g.setColor(Color.RED);
 	g.fillOval(level.ball.getX(),800-level.ball.gety(), 20, 20);
+	g.setColor(Color.BLACK);
 	g.fillRect(level.paddle.getPaddleX(), 600, level.paddle.getLength(), 10);
 	level.gameTimer.drawTimer(g);
-	g.drawString("Lives:"+Integer.toString(level.lives), 50, 50);
-	g.drawString("Score: "+Integer.toString(score), 50, 100);
-	drawNSOs(nsoList,g);
+	g.setColor(new Color(51,105,232));
+	g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20) );
+	g.drawString("Score: "+Integer.toString(score), 50, 40);
+	g.setColor(new Color(238,178,17));
+	g.drawString("Lives:"+Integer.toString(level.lives), 50, 70);
+
 }
 
 @Override
@@ -143,10 +162,8 @@ public void drawNSOs(List<NonStationaryObject>x, Graphics y) {
 	}}
 }
 public void checkNSO(List<NonStationaryObject> x, int a, int b) {
-	System.out.println(x);
 	if(!x.isEmpty()) {
 	for(NonStationaryObject z:x) {
-		System.out.println("Check"+((a<z.nsoX+50)&&(a>z.nsoX-50))+" "+((b<z.nsoY+50)&&(b>z.nsoY-50)));
 		if(z.hit(a, b)) {
 			score+=z.bonous;
 		}
@@ -159,6 +176,47 @@ public void updateNSO(List<NonStationaryObject>x) {
 	}}
 }
 
+public void generateObstacle() {
+	obList.add(new RectObstacle());
+}
+
+public void drawObstacle(Graphics x) {
+	for(Obstacle z:obList) {
+		z.drawObstacle(x);
+	}
+}
+
+public void AI(int x,int p, int l) {
+	if(level.ball.bally<350) {
+	if(x>p+0.5*l) {
+		if(p<800-l)
+		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		else 
+		{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+	}
+	else if(x<p+0.5*l){
+		if(p>0)
+		{level.paddle.setPaddleX(-30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		else
+			{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+	}
+	}
+	else{
+		if(x>p+l-50) {
+			if(p<800-l)
+			{level.paddle.setPaddleX(10);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			else 
+			{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		}
+		else if(x<p+50){
+			if(p>0)
+			{level.paddle.setPaddleX(-10);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			else
+				{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		}
+	}
+	level.ball.setPaddleXInBall(level.paddle.getPaddleX());
+}
 }
 
 
