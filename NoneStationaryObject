@@ -1,0 +1,75 @@
+import java.awt.Graphics;
+
+public abstract class NonStationaryObject {
+protected int nsoX;
+protected int nsoY;
+protected int radius;
+protected int bonous;
+protected int distanceX;
+protected int distanceY;
+protected boolean MoveToRight;
+protected boolean MoveUp;
+protected boolean visible;
+protected int speedX;
+protected int speedY;
+public NonStationaryObject(int x, int y, int radius, int bonous, int speedX, int speedY) {
+	this.nsoX=x;
+	this.nsoY=y;
+	this.radius=radius;
+	this.bonous=bonous;
+	distanceX=0;
+	distanceY=0;
+	MoveToRight=true;
+	MoveUp=true;
+	visible=true;
+	this.speedX=speedX;
+	this.speedY=speedY;
+}
+
+public void move() {
+	if (visible){
+	int a=speedX;
+	int b=speedY;
+	if(visible) {
+	if(MoveToRight) {
+		nsoX+=a;
+		distanceX+=a;
+		if(distanceX>=100)
+			MoveToRight=false;
+	}
+	else {
+		nsoX-=a;
+		distanceX-=a;
+		if(distanceX<=-100)
+			MoveToRight=true;
+	}
+	if(MoveUp) {
+		nsoY+=b;
+		distanceY+=b;
+		if(distanceY>=100)
+			MoveUp=false;
+	}
+	else {
+		nsoY-=b;
+		distanceY-=b;
+		if(distanceY<=-100)
+			MoveUp=true;
+	}}}
+}
+
+public boolean hit(int a, int b) {
+	if(visible) {
+	if((a<nsoX+radius)&&(a>nsoX-radius)&&(b<nsoY+radius)&&(b>nsoY-radius)&&visible) {
+		System.out.println("hit!");
+		visible=false;
+		return true;
+	}
+	else
+		return false;
+	}
+	return false;
+}
+public void drawNSO(Graphics x) {
+}
+
+}
