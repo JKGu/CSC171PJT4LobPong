@@ -25,6 +25,7 @@ public class Game extends JComponent implements KeyListener{
 	protected int keySpeed=15;
 	protected List<NonStationaryObject> nsoList=new ArrayList<NonStationaryObject>();
 	protected List<Obstacle> obList=new ArrayList<Obstacle>();
+	protected Object selectedValue;
 	public Game() {
 		score=0;
 		scoreTemp=0;
@@ -35,7 +36,14 @@ public class Game extends JComponent implements KeyListener{
 		timer=new Timer(10,new TimerCallback());
 		generateObstacle();
 		level.ball.loadObstacle(obList);
-		JOptionPane.showMessageDialog(null, "Welcome!\n Level 1");
+		Object[] possibleValues = { "Play by myself", "Play by AI"};
+		selectedValue = JOptionPane.showInputDialog(null,"Do you want to play by yourself or by an AI?", "Welcome",JOptionPane.INFORMATION_MESSAGE, null,possibleValues, possibleValues[0]);
+		if(selectedValue.equals("Play by AI")) {
+			JOptionPane.showMessageDialog(null, "The game will play automatically and you just need to watch:)\nLevel 1");
+		}
+		else
+		JOptionPane.showMessageDialog(null, "Use 'A' and 'D' to control the paddle\nLevel 1");
+		
 		timer.start();
 	}
 	
@@ -56,7 +64,8 @@ public class Game extends JComponent implements KeyListener{
 				level.ball.loadObstacle(obList);
 				level.gameTimer=new GameTimer(1500);
 			}
-			AI(level.ball.ballx,level.paddle.paddlex,level.paddle.length);
+			if(selectedValue.equals("Play by AI")) {
+			AI(level.ball.ballx,level.paddle.paddlex,level.paddle.length);}
 			level.ball.nextMove();
 			generateNSO(nsoList,100);
 			if (level.ball.score) {
@@ -101,7 +110,11 @@ public void paintComponent(Graphics g) {
 	g.drawString("Score: "+Integer.toString(score), 50, 40);
 	g.setColor(new Color(238,178,17));
 	g.drawString("Lives:"+Integer.toString(level.lives), 50, 70);
-
+	if(selectedValue.equals("Play by AI")) {
+		g.setColor(Color.RED);
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 50) );
+		g.drawString("AUTO",330 , 70);
+	}
 }
 
 @Override
