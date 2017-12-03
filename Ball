@@ -52,7 +52,10 @@ public class Ball {
 		else if(bally>=800)//hit top border
 			vy=-vy;
 		else if ((bally>=200+10)&&(bally<=200+30)&&(ballx>=paddlex)&&(ballx<=paddlex+paddleLengthx))
-			{vy=-vy+150;			score=true;}
+			{vy=-vy+150;	
+			Music music=new Music();
+			music.play();			
+			score=true;}
 		else if(bally<=20)
 			{loose=true;
 			}
