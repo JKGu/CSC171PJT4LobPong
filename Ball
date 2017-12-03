@@ -4,8 +4,8 @@ public class Ball {
 	boolean loose=false;
 	private double t;
 	private double step;//time length of each step
-	private int ballx;
-	private int bally;
+	protected int ballx;
+	protected int bally;
 	private int vx; //velocity on x axis
 	private int vy; //ditto
 	double g=9.8;
@@ -42,7 +42,6 @@ public class Ball {
 		this.paddleLengthx=y;
 	}
 	public void nextMove(){
-		System.out.println(ballx+" "+bally+" "+paddlex);
 		t+=step;
 		if((ballx>=800-20)||(ballx<=0))//hit right or left border
 			vx=-vx;
@@ -52,8 +51,6 @@ public class Ball {
 			{vy=-vy+150;			score=true;}
 		else if(bally<=20)
 			{loose=true;
-			
-			System.out.println("=======================================");
 			}
 		else
 			vy=(int) (vy-g*t);
