@@ -201,13 +201,13 @@ public void drawObstacle(Graphics x) {
 
 public void AI(int x,int p, int l) {
 	if(level.ball.bally<400) {
-	if(x>p+0.5*l) {
+	if(x>p+0.5*l+5) {
 		if(p<800-l)
 		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else 
 		{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 	}
-	else if(x<p+0.5*l){
+	else if(x<p+0.5*l-5){
 		if(p>0)
 		{level.paddle.setPaddleX(-30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else
