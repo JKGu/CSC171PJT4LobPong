@@ -1,0 +1,13 @@
+import java.awt.Graphics;
+
+public abstract class Obstacle {
+
+public void drawObstacle(Graphics x) {
+	// TODO Auto-generated method stub
+	
+}
+
+public int hit(int a, int b) {
+	return 0;
+}
+}
