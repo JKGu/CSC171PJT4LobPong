@@ -200,7 +200,7 @@ public void drawObstacle(Graphics x) {
 }
 
 public void AI(int x,int p, int l) {
-	if(level.ball.bally<350) {
+	if(level.ball.bally<400) {
 	if(x>p+0.5*l) {
 		if(p<800-l)
 		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
@@ -217,13 +217,13 @@ public void AI(int x,int p, int l) {
 	else{
 		if(x>p+l-50) {
 			if(p<800-l)
-			{level.paddle.setPaddleX(10);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			{level.paddle.setPaddleX(5);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 			else 
 			{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		}
 		else if(x<p+50){
 			if(p>0)
-			{level.paddle.setPaddleX(-10);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			{level.paddle.setPaddleX(-5);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 			else
 				{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		}
