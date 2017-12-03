@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 //y轴向上为正方向, 坐标计算全部以习惯坐标系为准，draw的时候再换算过来
 	//diameter of Ball=20
 public class Ball {
@@ -12,12 +15,12 @@ public class Ball {
 	private int paddlex=350;
 	protected int paddleLengthx;
 	protected boolean score;
-	
+	protected List<Obstacle> obList=new ArrayList<Obstacle>();
 	public Ball(int x){
 	ballx=50;
 	bally=750;
-	vx=1500;
-	vy=200;
+	vx=3000;
+	vy=1000;
 	t=0;
 	step=0.005;
 	paddleLengthx=x;
@@ -43,6 +46,7 @@ public class Ball {
 	}
 	public void nextMove(){
 		t+=step;
+		checkObstacle();
 		if((ballx>=800-20)||(ballx<=0))//hit right or left border
 			vx=-vx;
 		else if(bally>=800)//hit top border
@@ -70,4 +74,35 @@ public class Ball {
 		this.t=0;
 		this.loose=false;
 	}
+	
+	public void loadObstacle(List<Obstacle> x) {
+		obList.clear();
+		for(Obstacle a: x) {
+			obList.add(a);
+		}
+	}
+	
+	public void checkObstacle() {
+		for(Obstacle a: obList) {
+			if(a.hit(ballx, bally)!=5)
+			System.out.println(a.hit(ballx, bally));
+			switch(a.hit(ballx, bally)) {
+			case 1://up
+				vy=-vy;
+				break;
+			case 2://down
+				vy=-vy;
+				break;
+			case 3://left
+				vx=-vx;
+				break;
+			case 4:
+				vx=-vx;
+				break;
+				default:
+			}
+		}
+	}
+	
+	
 }
