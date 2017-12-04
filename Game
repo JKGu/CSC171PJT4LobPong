@@ -26,14 +26,18 @@ public class Game extends JComponent implements KeyListener{
 	protected List<NonStationaryObject> nsoList=new ArrayList<NonStationaryObject>();
 	protected List<Obstacle> obList=new ArrayList<Obstacle>();
 	protected Object selectedValue;
+	protected Music music;
+	
 	public Game() {
+		music=new Music();
+		music.loadMusic();
 		score=0;
 		scoreTemp=0;
 		maxScoreInLevel=0;
 		this.addKeyListener(this);
 		setFocusable(true);
 		level=new Level(diffc);
-		timer=new Timer(10,new TimerCallback());
+		timer=new Timer(1,new TimerCallback());
 		generateObstacle();
 		level.ball.loadObstacle(obList);
 		Object[] possibleValues = { "Play by myself", "Play by AI"};
@@ -43,19 +47,27 @@ public class Game extends JComponent implements KeyListener{
 		}
 		else
 		JOptionPane.showMessageDialog(null, "Use 'A' and 'D' to control the paddle\nLevel 1");
-		
+		generateNSO(nsoList,100);
 		timer.start();
 	}
 	
 	protected class TimerCallback implements ActionListener{
 		@Override
 	public void actionPerformed(ActionEvent arg0) {
+			
 			level.gameTimer.incrementTime();
 			checkNSO(nsoList,level.ball.ballx+10,level.ball.bally+10);
 			updateNSO(nsoList);
+			if(selectedValue.equals("Play by AI")) {
+				AI(level.ball.ballx,level.paddle.paddlex,level.paddle.length);}
+				level.ball.nextMove();
+				generateNSO(nsoList,500);
+				
 			if (level.gameTimer.timeElapsed>=level.gameTimer.length) {
+				music.loadMusic();
 				scoreTemp=score;
 				diffc++;
+				music.play("cloud.wav");
 				JOptionPane.showMessageDialog(null, "You win!\n Your score: "+score+"\nNext level: Level"+diffc);
 				level=new Level(diffc);
 				nsoList.clear();
@@ -64,16 +76,15 @@ public class Game extends JComponent implements KeyListener{
 				level.ball.loadObstacle(obList);
 				level.gameTimer=new GameTimer(1500);
 			}
-			if(selectedValue.equals("Play by AI")) {
-			AI(level.ball.ballx,level.paddle.paddlex,level.paddle.length);}
-			level.ball.nextMove();
-			generateNSO(nsoList,100);
+			
 			if (level.ball.score) {
 				score+=10*diffc;
+				music.play("1.wav");
 				level.ball.score=false;
 			}
 			if (level.ball.loose()) {
 				level.lives-=1;
+				music.play("die.wav");
 				if(level.lives>0) {
 				level.ball.reset();
 				level.gameTimer=new GameTimer(1500);
@@ -84,13 +95,14 @@ public class Game extends JComponent implements KeyListener{
 				}
 				else
 				{if(maxScoreInLevel<score) {maxScoreInLevel=score;}
-				JOptionPane.showMessageDialog(null, "You loose! \n Your score: "+maxScoreInLevel+"\n Back to Level 1");
+				JOptionPane.showMessageDialog(null, "You loose! \nYou've reached: Level "+diffc+"\nYour score: "+maxScoreInLevel+"\nBack to Level 1");
 				score=0;
 				scoreTemp=0;
 				maxScoreInLevel=0;
 				diffc=1;
 				level=new Level(diffc);
 				nsoList.clear();
+				obList.clear();
 				generateObstacle();
 				}
 			}
@@ -162,7 +174,7 @@ public void generateNSO(List<NonStationaryObject> x, int num) {
 	int decision=(int)(Math.random()*num);
 	switch(decision) {
 	case 0:
-		x.add(new MovingCloud((int)(Math.random()*600+100),(int)(Math.random()*500+400)));	
+		x.add(new MovingCloud((int)(Math.random()*600+100),(int)(Math.random()*300+400)));	
 	break;
 	default:
 	
@@ -178,6 +190,7 @@ public void checkNSO(List<NonStationaryObject> x, int a, int b) {
 	if(!x.isEmpty()) {
 	for(NonStationaryObject z:x) {
 		if(z.hit(a, b)) {
+			music.play("2.wav");
 			score+=z.bonous;
 		}
 	}}
@@ -191,6 +204,7 @@ public void updateNSO(List<NonStationaryObject>x) {
 
 public void generateObstacle() {
 	obList.add(new RectObstacle());
+	obList.add(new RectObstacle());
 }
 
 public void drawObstacle(Graphics x) {
@@ -200,31 +214,44 @@ public void drawObstacle(Graphics x) {
 }
 
 public void AI(int x,int p, int l) {
-	if(level.ball.bally<400) {
-		
-	if(x>p+0.5*l+5) {
+	if(level.ball.bally<250) {
+	if(x>p+0.5*l+2) {
 		if(p<800-l)
-		{level.paddle.setPaddleX(30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		{level.paddle.setPaddleX(20);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else 
 		{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 	}
-	else if(x<p+0.5*l-5){
+	else if(x<p+0.5*l-2){
 		if(p>0)
-		{level.paddle.setPaddleX(-30);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		{level.paddle.setPaddleX(-20);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		else
 			{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 	}
 	}
-	else{
-		if(x>p+l-50) {
+	else if (level.ball.bally<500){
+		if(x>p+l-5) {
 			if(p<800-l)
-			{level.paddle.setPaddleX(5);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			{level.paddle.setPaddleX(60);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 			else 
 			{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		}
-		else if(x<p+50){
+		else if(x<p+5){
 			if(p>0)
-			{level.paddle.setPaddleX(-5);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			{level.paddle.setPaddleX(-60);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			else
+				{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		}
+	}
+	else if(level.ball.bally<600) {
+		if(x>p+l*1.75) {
+			if(p<800-l)
+			{level.paddle.setPaddleX(8);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+			else 
+			{level.paddle.setAbsX(800-level.paddle.length);level.ball.setPaddleXInBall(level.paddle.paddlex);}
+		}
+		else if(x<p-l*0.25){
+			if(p>0)
+			{level.paddle.setPaddleX(-8);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 			else
 				{level.paddle.setAbsX(0);level.ball.setPaddleXInBall(level.paddle.paddlex);}
 		}
