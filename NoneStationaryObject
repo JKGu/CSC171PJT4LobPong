@@ -12,6 +12,8 @@ protected boolean MoveUp;
 protected boolean visible;
 protected int speedX;
 protected int speedY;
+protected Music music;
+
 public NonStationaryObject(int x, int y, int radius, int bonous, int speedX, int speedY) {
 	this.nsoX=x;
 	this.nsoY=y;
@@ -24,6 +26,7 @@ public NonStationaryObject(int x, int y, int radius, int bonous, int speedX, int
 	visible=true;
 	this.speedX=speedX;
 	this.speedY=speedY;
+	music=new Music();
 }
 
 public void move() {
@@ -60,7 +63,7 @@ public void move() {
 public boolean hit(int a, int b) {
 	if(visible) {
 	if((a<nsoX+radius)&&(a>nsoX-radius)&&(b<nsoY+radius)&&(b>nsoY-radius)&&visible) {
-		System.out.println("hit!");
+		//music.play("cloud.wav");
 		visible=false;
 		return true;
 	}
