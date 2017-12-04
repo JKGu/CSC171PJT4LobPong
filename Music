@@ -4,6 +4,11 @@ import java.net.URL;
 import javax.swing.JApplet;  
   
 public class Music {  
+	protected AudioClip faded1;
+	protected AudioClip faded2;
+	protected AudioClip faded3;
+	protected AudioClip faded4;
+	
     public static AudioClip loadSound(String filename) {  
         URL url = null;  
         try {  
@@ -12,8 +17,30 @@ public class Music {
         catch (MalformedURLException e) {;}  
         return JApplet.newAudioClip(url);  
     }  
-    public void play() {  
-        AudioClip faded = loadSound("music/1.wav");  
-        faded.play();  
-    }  
+    public Music() {
+        faded1 = loadSound("music/1.wav");  
+        faded2 = loadSound("music/cloud.wav");  
+        faded3=loadSound("music/die.wav");
+        faded4=loadSound("music/2.wav");
+    }
+    public void loadMusic() {
+        faded1 = loadSound("music/1.wav");  
+        faded2 = loadSound("music/cloud.wav");  
+        faded3=loadSound("music/die.wav");
+        faded4=loadSound("music/2.wav");
+      //  faded = loadSound("music/"+filename);  
+    }
+    public void play(String filename) {  
+    	if(filename.equals("1.wav")) {
+        faded1.play();  }
+    	else if(filename.equals("cloud.wav")) {
+    		faded2.play();
+    	}
+    	else if(filename.equals("2.wav")) {
+    		faded4.play();
+    	}
+    	else {
+        faded3.play();  }
+    }
+
 }  
