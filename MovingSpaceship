@@ -1,0 +1,27 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class MovingSpaceship extends NonStationaryObject {
+	protected Image img1;
+
+	public MovingSpaceship(int x, int y) {
+		super(x, y, 30,30,1,0);
+	}
+	@Override
+	public void drawNSO(Graphics x) {
+		if(visible) {
+		 try {
+		        img1 = ImageIO.read( new File("spaceship.gif"));
+		    } catch (IOException e) {
+		    	e.printStackTrace();
+		    }
+	        x.drawImage(img1, super.nsoX-30, 800-(super.nsoY+15), null);
+			
+	}}
+
+}
